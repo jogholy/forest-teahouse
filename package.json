@@ -1,0 +1,46 @@
+{
+  "name": "forest-teahouse",
+  "version": "0.1.0",
+  "description": "森林茶屋 - 治愈系茶文化经营游戏",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "game",
+    "phaser",
+    "react",
+    "typescript",
+    "pwa"
+  ],
+  "author": "Forest Teahouse Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "vite-plugin-pwa": "^0.19.8",
+    "workbox-window": "^7.4.0"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
