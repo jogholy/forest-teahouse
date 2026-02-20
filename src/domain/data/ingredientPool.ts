@@ -1,13 +1,13 @@
 import { Ingredient, Rarity } from '../models/Ingredient';
 
 export const ingredientPool: Ingredient[] = [
-  // COMMON - 60% (8种)
+  // COMMON - 60% (8种) - 基础食材，客人日常需求
   {
     id: 'common-001',
     name: '晨露茶叶',
     rarity: Rarity.COMMON,
     description: '清晨采摘的新鲜茶叶，带着露水的清香',
-    tags: ['清香'],
+    tags: ['清香'], // 风味标签用于配方匹配
   },
   {
     id: 'common-002',
