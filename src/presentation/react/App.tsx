@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { BootScene } from '../phaser/scenes/BootScene';
 import { GachaScene } from '../phaser/scenes/GachaScene';
 import { BrewScene } from '../phaser/scenes/BrewScene';
+import { GuestScene } from '../phaser/scenes/GuestScene';
 import './App.css';
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
       height: 600,
       parent: 'game-container',
       backgroundColor: '#F5F1E8',
-      scene: [BootScene, GachaScene, BrewScene],
+      scene: [BootScene, GachaScene, BrewScene, GuestScene],
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,

@@ -60,6 +60,19 @@ export class GachaScene extends Phaser.Scene {
 
     brewButton.on('pointerdown', () => this.scene.start('BrewScene'));
 
+    // 茶屋按钮
+    const guestButton = this.add
+      .text(200, 460, '← 茶屋', {
+        fontSize: '24px',
+        color: '#fff',
+        backgroundColor: '#8b7355',
+        padding: { x: 20, y: 10 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+
+    guestButton.on('pointerdown', () => this.scene.start('GuestScene'));
+
     // 结果显示区域
     this.resultText = this.add
       .text(400, 500, '点击按钮开始采集', {
