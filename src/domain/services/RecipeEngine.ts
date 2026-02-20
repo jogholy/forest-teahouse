@@ -44,7 +44,7 @@ export class RecipeEngine {
   }
 
   // 试茶台实验（无食谱时）
-  experiment(ingredients: Ingredient[]): BrewResult {
+  experiment(_ingredients: Ingredient[]): BrewResult {
     const success = Math.random() < this.EXPERIMENT_SUCCESS_RATE;
 
     if (!success) {

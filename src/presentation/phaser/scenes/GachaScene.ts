@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GachaService } from '../../../application/services/GachaService';
+import { CollectionMethod } from '../../../domain/models/Collection';
 import { Ingredient } from '../../../domain/models/Ingredient';
 
 export class GachaScene extends Phaser.Scene {
@@ -13,98 +14,100 @@ export class GachaScene extends Phaser.Scene {
   create() {
     this.gachaService = new GachaService();
 
-    // 标题
-    this.add
-      .text(400, 100, '🍵 森林晨采', {
-        fontSize: '48px',
-        color: '#2d5016',
-      })
-      .setOrigin(0.5);
+    this.add.text(400, 50, '🌿 森林晨采', { fontSize: '48px', color: '#2d5016' }).setOrigin(0.5);
 
-    // 抽卡按钮
-    const pullButton = this.add
-      .text(400, 300, '采集一次', {
-        fontSize: '32px',
-        color: '#fff',
-        backgroundColor: '#4a7c59',
-        padding: { x: 20, y: 10 },
-      })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-
-    pullButton.on('pointerdown', () => this.pullOne());
-
-    // 十连抽按钮
-    const pull10Button = this.add
-      .text(400, 380, '采集十次', {
-        fontSize: '32px',
+    // 自动采集
+    const autoButton = this.add
+      .text(200, 200, '自动采集\n(挂机)', {
+        fontSize: '20px',
         color: '#fff',
         backgroundColor: '#6b9b7f',
-        padding: { x: 20, y: 10 },
-      })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-
-    pull10Button.on('pointerdown', () => this.pullTen());
-
-    // 试茶台按钮
-    const brewButton = this.add
-      .text(400, 460, '前往试茶台 →', {
-        fontSize: '24px',
-        color: '#fff',
-        backgroundColor: '#8b7355',
-        padding: { x: 20, y: 10 },
-      })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-
-    brewButton.on('pointerdown', () => this.scene.start('BrewScene'));
-
-    // 茶屋按钮
-    const guestButton = this.add
-      .text(200, 460, '← 茶屋', {
-        fontSize: '24px',
-        color: '#fff',
-        backgroundColor: '#8b7355',
-        padding: { x: 20, y: 10 },
-      })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-
-    guestButton.on('pointerdown', () => this.scene.start('GuestScene'));
-
-    // 结果显示区域
-    this.resultText = this.add
-      .text(400, 500, '点击按钮开始采集', {
-        fontSize: '20px',
-        color: '#333',
+        padding: { x: 15, y: 10 },
         align: 'center',
       })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    autoButton.on('pointerdown', () => this.collect(CollectionMethod.AUTO));
+
+    // 手动采集
+    const manualButton = this.add
+      .text(400, 200, '手动采集\n(稀有率+20%)', {
+        fontSize: '20px',
+        color: '#fff',
+        backgroundColor: '#4a7c59',
+        padding: { x: 15, y: 10 },
+        align: 'center',
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    manualButton.on('pointerdown', () => this.collect(CollectionMethod.MANUAL));
+
+    // 事件采集
+    const eventButton = this.add
+      .text(600, 200, '事件采集\n(必得稀有)', {
+        fontSize: '20px',
+        color: '#fff',
+        backgroundColor: '#8b7355',
+        padding: { x: 15, y: 10 },
+        align: 'center',
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    eventButton.on('pointerdown', () => this.collect(CollectionMethod.EVENT));
+
+    // 结果显示
+    this.resultText = this.add
+      .text(400, 350, '选择采集方式', { fontSize: '20px', color: '#333', align: 'center' })
       .setOrigin(0.5);
+
+    // 导航按钮
+    this.add
+      .text(200, 500, '→ 试茶台', {
+        fontSize: '20px',
+        color: '#666',
+        backgroundColor: '#ddd',
+        padding: { x: 10, y: 5 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => this.scene.start('BrewScene'));
+
+    this.add
+      .text(600, 500, '→ 茶屋', {
+        fontSize: '20px',
+        color: '#666',
+        backgroundColor: '#ddd',
+        padding: { x: 10, y: 5 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => this.scene.start('GuestScene'));
   }
 
-  private pullOne() {
-    const result = this.gachaService.pullOne();
-    this.displayResult([result]);
+  private collect(method: CollectionMethod) {
+    const ingredient = this.gachaService.pullOne(method);
+    this.showResult(ingredient, method);
   }
 
-  private pullTen() {
-    const results = this.gachaService.pullMultiple(10);
-    this.displayResult(results);
-  }
+  private showResult(ingredient: Ingredient, method: CollectionMethod) {
+    const methodText = {
+      [CollectionMethod.AUTO]: '自动采集',
+      [CollectionMethod.MANUAL]: '手动采集',
+      [CollectionMethod.EVENT]: '事件采集',
+    }[method];
 
-  private displayResult(results: Ingredient[]) {
-    const text = results.map(i => `${this.getRarityEmoji(i.rarity)} ${i.name}`).join('\n');
-    this.resultText.setText(text);
+    this.resultText.setText(
+      `${methodText}\n${this.getRarityEmoji(ingredient.rarity)} ${ingredient.name}\n${ingredient.description}`
+    );
   }
 
   private getRarityEmoji(rarity: string): string {
-    const emojiMap: Record<string, string> = {
+    const map: Record<string, string> = {
       COMMON: '⚪',
       UNCOMMON: '🟢',
       RARE: '🔵',
       LEGENDARY: '🟡',
     };
-    return emojiMap[rarity] || '⚪';
+    return map[rarity] || '⚪';
   }
 }
