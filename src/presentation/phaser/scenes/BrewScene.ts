@@ -3,6 +3,7 @@ import { GachaService } from '../../../application/services/GachaService';
 import { RecipeEngine } from '../../../domain/services/RecipeEngine';
 import { recipePool } from '../../../domain/data/recipePool';
 import { Ingredient } from '../../../domain/models/Ingredient';
+import { BrewAnimation } from '../animations/BrewAnimation';
 
 export class BrewScene extends Phaser.Scene {
   private gachaService!: GachaService;
@@ -96,7 +97,7 @@ export class BrewScene extends Phaser.Scene {
     this.resultText.setText(result.message + `\n品质: ${Math.floor(result.quality * 100)}%`);
   }
 
-  private brewWithRecipe() {
+  private async brewWithRecipe() {
     if (this.selectedIngredients.length === 0) {
       this.resultText.setText('请先采集食材！');
       return;
@@ -107,6 +108,11 @@ export class BrewScene extends Phaser.Scene {
       this.resultText.setText('没有匹配的完整配方');
       return;
     }
+
+    // 播放泡茶动画
+    const animation = new BrewAnimation(this, 400, 350);
+    await animation.play();
+    animation.destroy();
 
     const result = this.recipeEngine.brew(this.selectedIngredients, matches[0].recipe);
     this.resultText.setText(result.message + `\n品质: ${Math.floor(result.quality * 100)}%`);

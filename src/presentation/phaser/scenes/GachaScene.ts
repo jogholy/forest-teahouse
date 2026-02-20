@@ -2,10 +2,12 @@ import Phaser from 'phaser';
 import { GachaService } from '../../../application/services/GachaService';
 import { CollectionMethod } from '../../../domain/models/Collection';
 import { Ingredient } from '../../../domain/models/Ingredient';
+import { CollectAnimation } from '../animations/CollectAnimation';
 
 export class GachaScene extends Phaser.Scene {
   private gachaService!: GachaService;
   private resultText!: Phaser.GameObjects.Text;
+  private collectAnimation!: CollectAnimation;
 
   constructor() {
     super({ key: 'GachaScene' });
@@ -13,6 +15,7 @@ export class GachaScene extends Phaser.Scene {
 
   create() {
     this.gachaService = new GachaService();
+    this.collectAnimation = new CollectAnimation(this);
 
     this.add.text(400, 50, '🌿 森林晨采', { fontSize: '48px', color: '#2d5016' }).setOrigin(0.5);
 
@@ -86,6 +89,10 @@ export class GachaScene extends Phaser.Scene {
 
   private collect(method: CollectionMethod) {
     const ingredient = this.gachaService.pullOne(method);
+
+    // 播放采集特效
+    this.collectAnimation.play(400, 300, ingredient.rarity);
+
     this.showResult(ingredient, method);
   }
 
