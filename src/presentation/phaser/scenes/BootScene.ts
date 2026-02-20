@@ -60,9 +60,9 @@ export class BootScene extends Phaser.Scene {
     });
     clickHint.setOrigin(0.5);
 
-    // 点击启动 Gacha 场景
+    // 点击启动主场景
     this.input.once('pointerdown', () => {
-      this.scene.start('GachaScene');
+      this.scene.start('MainScene');
     });
   }
 }
