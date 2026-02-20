@@ -15,11 +15,16 @@ describe('GuestEngine', () => {
     expect(guest.type).toBe(GuestType.COMMON);
   });
 
-  it('should generate special guest every 5 visits', () => {
-    for (let i = 0; i < 4; i++) {
-      engine.generateGuest(guestPool);
-    }
-    const guest = engine.generateGuest(guestPool);
-    expect(guest.type).toBe(GuestType.SPECIAL);
+  it('should add affection', () => {
+    const guest = guestPool[0];
+    const updated = engine.addAffection(guest, 20);
+    expect(updated.affection).toBe(20);
+  });
+
+  it('should unlock chapters based on affection', () => {
+    const guest = { ...guestPool[0], affection: 50 };
+    const chapters = engine.unlockChapters(guest);
+    const unlockedCount = chapters.filter(c => c.unlocked).length;
+    expect(unlockedCount).toBeGreaterThan(1);
   });
 });

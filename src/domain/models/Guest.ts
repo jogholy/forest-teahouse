@@ -12,6 +12,16 @@ export interface Guest {
   personality: string;
   favoriteTag?: string;
   story?: string;
+  affection?: number; // 好感度（0-100）
+  storyChapters?: StoryChapter[]; // 故事章节
+}
+
+export interface StoryChapter {
+  id: string;
+  title: string;
+  content: string;
+  unlocked: boolean;
+  requiredAffection: number; // 解锁所需好感度
 }
 
 export interface GuestVisit {
@@ -19,4 +29,5 @@ export interface GuestVisit {
   order?: string;
   satisfaction: number;
   dialogue: string[];
+  affectionGain?: number; // 本次获得的好感度
 }
