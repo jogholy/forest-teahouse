@@ -52,20 +52,17 @@ export class BootScene extends Phaser.Scene {
     );
     hint.setOrigin(0.5);
 
-    // 添加简单的动画效果
-    this.tweens.add({
-      targets: title,
-      alpha: { from: 0, to: 1 },
-      duration: 1000,
-      ease: 'Power2',
+    // 添加点击提示
+    const clickHint = this.add.text(width / 2, height / 2 + 160, '点击屏幕开始', {
+      fontSize: '16px',
+      color: '#4a7c59',
+      fontFamily: 'Arial, sans-serif',
     });
+    clickHint.setOrigin(0.5);
 
-    this.tweens.add({
-      targets: [subtitle, status, hint],
-      alpha: { from: 0, to: 1 },
-      duration: 1000,
-      delay: 500,
-      ease: 'Power2',
+    // 点击启动 Gacha 场景
+    this.input.once('pointerdown', () => {
+      this.scene.start('GachaScene');
     });
   }
 }
