@@ -1,6 +1,7 @@
 import { GachaEngine } from '../../domain/services/GachaEngine';
 import { Ingredient } from '../../domain/models/Ingredient';
 import { ingredientPool } from '../../domain/data/ingredientPool';
+import { CollectionMethod } from '../../domain/models/Collection';
 
 export class GachaService {
   private engine: GachaEngine;
@@ -11,14 +12,14 @@ export class GachaService {
     this.pool = ingredientPool;
   }
 
-  pullOne(): Ingredient {
-    return this.engine.pull(this.pool);
+  pullOne(method: CollectionMethod = CollectionMethod.AUTO): Ingredient {
+    return this.engine.pull(this.pool, method);
   }
 
-  pullMultiple(count: number): Ingredient[] {
+  pullMultiple(count: number, method: CollectionMethod = CollectionMethod.AUTO): Ingredient[] {
     const results: Ingredient[] = [];
     for (let i = 0; i < count; i++) {
-      results.push(this.engine.pull(this.pool));
+      results.push(this.engine.pull(this.pool, method));
     }
     return results;
   }
